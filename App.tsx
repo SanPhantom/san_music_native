@@ -5,44 +5,36 @@
  * @format
  * @flow
  */
-
+import './package/utils/global';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { extendTheme, NativeBaseProvider } from 'native-base';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import HomeScreen from './package/screens/HomeScreen';
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.white,
-  };
+  const theme = extendTheme({
+    config: {
+      useSystemColorMode: true,
+    },
+  });
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        showHideTransition={'fade'}
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text>123</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name={'Home'} component={HomeScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </>
   );
 }
 
