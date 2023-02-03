@@ -1,10 +1,11 @@
-import { Box, Divider, ScrollView, useTheme } from 'native-base';
+import { Box, Divider, useTheme } from 'native-base';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import {
   Animated,
   SafeAreaView,
   useColorScheme,
   StatusBar,
+  StyleSheet,
 } from 'react-native';
 
 interface IAppLayoutProps {
@@ -52,19 +53,32 @@ const AppLayout = forwardRef(
           {statusTranslucent && <Box style={statusStyle} />}
           {header}
         </Box>
-        <Divider
-          _light={{ bg: colors.light[200] }}
-          _dark={{ bg: colors.dark[200] }}
-        />
         <Box
           style={flexStyle}
           _dark={{ bg: colors.darkBlue[900] }}
-          _light={{ bg: colors.white }}>
-          <ScrollView>{children}</ScrollView>
+          _light={{ bg: colors.white }}
+          _text={{ color: isDarkMode ? colors.lightText : colors.darkText }}>
+          <Animated.ScrollView style={flexStyle}>
+            <Box
+              style={styles.padding}
+              _dark={{ bg: colors.darkBlue[900] }}
+              _light={{ bg: colors.white }}
+              _text={{
+                color: isDarkMode ? colors.lightText : colors.darkText,
+              }}>
+              {children}
+            </Box>
+          </Animated.ScrollView>
         </Box>
       </SafeAreaView>
     );
   },
 );
+
+const styles = StyleSheet.create({
+  padding: {
+    padding: 16,
+  },
+});
 
 export default AppLayout;
